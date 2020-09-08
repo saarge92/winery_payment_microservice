@@ -4,7 +4,6 @@ import Stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
 import { VineSellDto } from '../dto/vine.sell.dto';
 import { RpcException } from '@nestjs/microservices';
-import { VineCheckRules } from './vine.check.service';
 
 @Injectable()
 export class SellService {
@@ -12,8 +11,7 @@ export class SellService {
   private readonly privateApiKey: string;
 
   constructor(@InjectStripe() private readonly stripeClient: Stripe,
-              protected readonly configService: ConfigService,
-              protected readonly vineCheckService: VineCheckRules) {
+              protected readonly configService: ConfigService) {
     this.publicApiKey = configService.get<string>('STRIPE_PUBLIC_KEY');
     this.privateApiKey = configService.get<string>('STRIPE_PRIVATE_KEY');
   }
@@ -23,13 +21,6 @@ export class SellService {
    * @param vineSellInfo Data transfer object which contains info  about vines selling
    */
   public async buyVine(vineSellInfo: VineSellDto): Promise<Stripe.Charge> {
-    const checkValidationVines = await this.vineCheckService.checkValidation(vineSellInfo.vines);
-    if (!checkValidationVines[0])
-      throw new RpcException({
-        message: 'Неправильно передан',
-        code: 409,
-      });
-
     const token = await this.createTokenForPayInfo(vineSellInfo).catch(error => {
       throw new RpcException({
         message: error.message,
@@ -38,7 +29,7 @@ export class SellService {
       });
     });
 
-    const charge = await this.createCharge(checkValidationVines[1], token).catch(error => {
+    const charge = await this.createCharge(vineSellInfo.amount, token).catch(error => {
       throw new RpcException({
         message: error.message,
         code: 409,

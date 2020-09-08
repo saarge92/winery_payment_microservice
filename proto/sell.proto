@@ -15,12 +15,13 @@ message VineInfoDto{
 
 message VineSellDto{
   repeated VineInfoDto vines = 1;
-  optional string email = 2;
-  required string card_number = 3;
-  required string csv_code = 4;
-  required string card_holder = 5;
-  required uint32 expires_month = 6;
-  required uint32  expires_year = 7;
+  required uint64 amount = 2;
+  optional string email = 3;
+  required string card_number = 4;
+  required string csv_code = 5;
+  required string card_holder = 6;
+  required uint32 expires_month = 7;
+  required uint32  expires_year = 8;
 }
 
 message Charge{

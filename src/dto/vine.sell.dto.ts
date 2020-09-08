@@ -1,9 +1,23 @@
-import { IsArray, IsCreditCard, IsEmail, IsInt, IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
+import {
+  IsArray,
+  IsCreditCard,
+  IsEmail,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
 
 export class VineSellDto {
 
   @IsArray()
   vines: Array<VineInfoDto>;
+
+  @IsNotEmpty()
+  @IsNumber()
+  amount:number;
 
   @IsOptional()
   @IsEmail()

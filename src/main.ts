@@ -9,6 +9,7 @@ import { join } from 'path';
       options: {
         package: 'sell',
         protoPath: join(__dirname, '../proto/sell.proto'),
+        loader: { keepCase: true },
       },
     },
   );

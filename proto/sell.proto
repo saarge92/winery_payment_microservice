@@ -1,0 +1,28 @@
+// Proto file for selling vines
+syntax = "proto2";
+
+package sell;
+
+service VineSellService
+{
+  rpc sellVines(VineSellDto) returns (Charge) {};
+}
+
+message VineInfoDto{
+  required string vineId = 1;
+  required uint32 quantity = 2;
+}
+
+message VineSellDto{
+  repeated VineInfoDto vines = 1;
+  optional string email = 2;
+  required string card_number = 3;
+  required string csv_code = 4;
+  required string card_holder = 5;
+  required uint32 expires_month = 6;
+  required uint32  expires_year = 7;
+}
+
+message Charge{
+  required string id = 1;
+}
